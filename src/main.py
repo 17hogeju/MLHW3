@@ -68,7 +68,6 @@ def main() -> None:
 
                 for feature in test_x.columns[:-1]:
                     prod_setosa *= probabilities[Labels.SETOSA][feature][test_x[feature].iloc[row]]
-                    print("Bin?: ", test_x[feature].iloc[row])
                     prod_not_setosa *= probabilities[Labels.NOTSETOSA][feature][test_x[feature].iloc[row]]
                     
                 
@@ -93,7 +92,6 @@ def main() -> None:
             F1_measure[bin_string].append(2*precision*recall/(precision+recall))
             TPR[bin_string].append(true_pos / (true_pos + false_neg))
             FPR[bin_string].append(false_pos/ (true_neg+false_pos))
-            break
 
     
     
@@ -146,10 +144,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
