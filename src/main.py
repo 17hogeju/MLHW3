@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from statistics import mean
+pd.options.mode.chained_assignment = None
 
 
 def count(data, colname, bin_num, target):
@@ -42,6 +43,9 @@ def main() -> None:
             train_len = int(TRAIN_SIZE*len(data_copy))
             train = data_copy.iloc[:train_len,:]
             test = data_copy.iloc[train_len:,:]
+            test_original = data.iloc[train_len:,:]
+            test_original.to_csv("../data/test_data_before_train/bin_"+ str(bin_sz)+"/split_" + str(split_num) + ".csv", index=False)
+            test_out = test_original.copy(deep=True)
             
             # calculate train probabilities
             n_yes = count(train, CLASS, SETOSA, SETOSA)
@@ -79,16 +83,19 @@ def main() -> None:
                 max_diff = max(abs(prod_setosa - prod_not_setosa), max_diff)
 
                 if prod_setosa > prod_not_setosa:
+                    test_out[CLASS].iloc[row] = SETOSA
                     if test[CLASS].iloc[row] == SETOSA:
                         true_pos += 1
                     else:
                         false_pos += 1
                 else:
+                    test_out[CLASS].iloc[row] = NOTSETOSA
                     if test[CLASS].iloc[row] == NOTSETOSA:
                         true_neg += 1
                     else:
                         false_neg += 1
             
+            test_out.to_csv("../data/test_data_after_train/bin_"+ str(bin_sz)+"/split_" + str(split_num) + ".csv", index=False)
 
             accuracies[bin_sz].append((true_pos + true_neg) / len(test))
 
