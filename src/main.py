@@ -42,6 +42,8 @@ def main() -> None:
             # split into test and train
             train_len = int(TRAIN_SIZE*len(data_copy))
             train = data_copy.iloc[:train_len,:]
+            train_original = data.iloc[:train_len,:]
+            train_original.to_csv("../data/train_data/bin_"+ str(bin_sz)+"/split_" + str(split_num) + ".csv", index=False)
             test = data_copy.iloc[train_len:,:]
             test_original = data.iloc[train_len:,:]
             test_original.to_csv("../data/test_data_before_train/bin_"+ str(bin_sz)+"/split_" + str(split_num) + ".csv", index=False)
