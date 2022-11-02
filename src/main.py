@@ -41,18 +41,14 @@ def get_probabilities():
     TPR = {bin_s: [] for bin_s in BIN_SIZES}
     
     for split_num in range(NUM_SPLITS):
-        print("splitnum: ", split_num)
         roc = {bin_s: [[],[]] for bin_s in BIN_SIZES}
         for bin_sz in BIN_SIZES:
-            print("binsize: ", bin_sz)
             train_data = pd.read_csv("../data/bin_" + str(bin_sz) + "/train/split_" + str(split_num) + ".csv", index_col=False)
             test_data = pd.read_csv("../data/bin_" + str(bin_sz) + "/test/split_" + str(split_num) + ".csv", index_col=False)
             prediction_data = test_data.copy(deep=True)
 
             # discretize the data
             for col in train_data.columns[:-1]:
-                # avg = mean(train_data[col], test_data[col])
-                # train_data[col] = train_data[col].replace(0, avg)
                 train_data[col] = pd.cut(train_data[col], bins=bin_sz, labels=False)
                 test_data[col] = pd.cut(test_data[col], bins=bin_sz, labels=False)
 
@@ -107,10 +103,7 @@ def get_probabilities():
             prediction_data.to_csv("../data/bin_"+ str(bin_sz)+"/predictions/split_" + str(split_num) + ".csv", index=False)
 
             accuracies[bin_sz].append((true_pos + true_neg) / len(test_data))
-            print("true pos: ", true_pos)
-            print("false pos: ", false_pos)
-            print("true neg: ", true_neg)
-            print("false neg: ", false_neg)
+
             # Calculate the F1 scores
             precision = true_pos / (true_pos + false_pos)
             recall = true_pos / (true_pos + false_neg)
@@ -243,12 +236,6 @@ def interpret_intput(n: int) -> int:
 import os
 def main():
     print("Assignment 3: Naive Bayes")
-    # path = "../data/bin_20/predictions/"
-    # for filename in os.listdir(path):
-    #     data = pd.read_csv(path + filename, usecols=range(1,6))
-    #     data.columns = ['sepallength','sepalwidth','petallength', 'petalwidth', 'class']
-    #     data.to_csv(path + filename, index=False)
-
     while True:
         n = get_input(1,3, "(1) Create train-test splits on Iris data set\n(2) Train model using train-test data to from data/bin_#/train and data/bin_#/test\n(3) Quit\nChoose number to run function: ")
         
